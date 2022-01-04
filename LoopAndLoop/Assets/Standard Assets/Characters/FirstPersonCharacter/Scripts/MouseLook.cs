@@ -19,8 +19,13 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
         private Quaternion m_CharacterTargetRot;
         private Quaternion m_CameraTargetRot;
-        private bool m_cursorIsLocked = true;
-
+        public bool m_cursorIsLocked = true;
+        //////////////////////////////////////////////////////////////////////
+        public bool bunki = true;
+        public GameObject pauseUI;
+        public GameObject Gray;
+        
+        
         public void Init(Transform character, Transform camera)
         {
             m_CharacterTargetRot = character.localRotation;
@@ -74,24 +79,39 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
         private void InternalLockUpdate()
         {
-            if(Input.GetKeyUp(KeyCode.Escape))
+            if(Input.GetKeyDown(KeyCode.Escape))
+            {
+                bunki = !bunki;
+                Time.timeScale = 0f;
+               
+            }
+            
+
+            if (m_cursorIsLocked == true)//gamemode状態
+            {
+                pauseUI.SetActive(false);
+                Gray.SetActive(false);
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+             
+               
+            }
+            else if (m_cursorIsLocked == false)//ポーズメニュー
+            {
+                pauseUI.SetActive(true);
+                Gray.SetActive(true);
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+              
+                
+            }
+            if(bunki== false)
             {
                 m_cursorIsLocked = false;
             }
-            else if(Input.GetMouseButtonUp(0))
+            else if(bunki == true)
             {
                 m_cursorIsLocked = true;
-            }
-
-            if (m_cursorIsLocked)
-            {
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
-            }
-            else if (!m_cursorIsLocked)
-            {
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
             }
         }
 
